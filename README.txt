@@ -1,4 +1,8 @@
-# VLV Sprite organizer
+# 🖼️ VLV Sprite Organizer
+
+> [!TIP]
+> **Consulte o [Guia do Usuário](file:///c:/Users/Victor/Proj/SpriteManager/GUIA_DO_USUARIO.md) para instruções detalhadas de uso.**
+
 
 Uma aplicação Desktop simples em Python (usando Tkinter e Pillow) para carregar, fatiar e pré-visualizar *Sprite Sheets* de Pixel Art, organizar por projeto e tag, e exportar com versionamento automático. Ideal para estudantes ou devs de jogos (Unity, GameMaker) que querem visualizar a animação sem precisar importar todos os assets manualmente para a engine primeiro.
 

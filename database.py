@@ -58,6 +58,14 @@ class UserDB:
         except Exception as e:
             return False, str(e)
 
+    def get_all_users(self):
+        """Retorna uma lista com os nomes de todos os usuários registrados."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT username FROM users")
+            users = cursor.fetchall()
+            return [u[0] for u in users]
+
     def authenticate_user(self, username, password):
         """Autentica o usuário. Retorna (user_id, username) se sucesso, senão None."""
         with sqlite3.connect(self.db_path) as conn:

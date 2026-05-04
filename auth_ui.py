@@ -13,12 +13,21 @@ class LoginRegisterWindow:
         self.on_success = on_success_callback
         
         self.show_login = True  # Alterna entre Login e Registro
+        self.is_dark_mode = False
         self._build_ui()
 
     def _build_ui(self):
         # Limpa o root se já tiver algo (para alternar entre login/registro)
         for widget in self.root.winfo_children():
             widget.destroy()
+
+        # Botão de Tema no topo
+        bg_root = "#1e1e2e" if self.is_dark_mode else "#f8f9fa"
+        fg_btn = "#f8f8f2" if self.is_dark_mode else "#333"
+        btn_text = "☀️ Modo Claro" if self.is_dark_mode else "🌙 Modo Escuro"
+        
+        self.btn_theme = tk.Button(self.root, text=btn_text, font=("Segoe UI", 9), bg=bg_root, fg=fg_btn, bd=0, cursor="hand2", command=self.toggle_theme)
+        self.btn_theme.place(relx=0.95, rely=0.05, anchor=tk.NE)
 
         # Frame Central (Card)
         card = tk.Frame(self.root, bg="white", padx=30, pady=30, highlightbackground="#e0e0e0", highlightthickness=1)
@@ -30,8 +39,16 @@ class LoginRegisterWindow:
 
         # Campos
         tk.Label(card, text="Usuário", font=("Segoe UI", 10), bg="white", fg="#666").pack(anchor="w")
-        self.entry_user = tk.Entry(card, font=("Segoe UI", 11), bg="#f1f3f5", bd=0, insertbackground="black")
-        self.entry_user.pack(fill=tk.X, pady=(5, 15), ipady=8)
+        
+        if self.show_login:
+            users = self.db.get_all_users()
+            self.entry_user = ttk.Combobox(card, values=users, font=("Segoe UI", 11), state="readonly")
+            if users:
+                self.entry_user.current(0)
+            self.entry_user.pack(fill=tk.X, pady=(5, 15))
+        else:
+            self.entry_user = tk.Entry(card, font=("Segoe UI", 11), bg="#f1f3f5", bd=0, insertbackground="black")
+            self.entry_user.pack(fill=tk.X, pady=(5, 15), ipady=8)
         
         # Simula borda no entry
         # self.entry_user.config(highlightbackground="#dee2e6", highlightthickness=1)
@@ -66,6 +83,46 @@ class LoginRegisterWindow:
     def _toggle_mode(self):
         self.show_login = not self.show_login
         self._build_ui()
+        if self.is_dark_mode:
+            self.apply_theme(True)
+
+    def apply_theme(self, to_dark):
+        color_map = {
+            "#f8f9fa": "#1e1e2e", "white": "#282a36", "#ffffff": "#282a36",
+            "#333": "#f8f8f2", "#333333": "#f8f8f2", "#666": "#bfbfbf", "#666666": "#bfbfbf",
+            "#e0e0e0": "#44475a", "#f1f3f5": "#44475a", "black": "white", "#007bff": "#66b2ff", "#0056b3": "#99ccff"
+        }
+        if not to_dark:
+            color_map = {"#1e1e2e": "#f8f9fa", "#282a36": "white", "#f8f8f2": "#333", "#bfbfbf": "#666",
+                         "#44475a": "#f1f3f5", "white": "black", "#66b2ff": "#007bff", "#99ccff": "#0056b3"}
+
+        def update_widget(w):
+            try:
+                keys = w.keys()
+                if "bg" in keys and w.cget("bg") in color_map:
+                    w.configure(bg=color_map[w.cget("bg")])
+                if "fg" in keys and w.cget("fg") in color_map:
+                    w.configure(fg=color_map[w.cget("fg")])
+                if "insertbackground" in keys and w.cget("insertbackground") in color_map:
+                    w.configure(insertbackground=color_map[w.cget("insertbackground")])
+                if "highlightbackground" in keys and w.cget("highlightbackground") in color_map:
+                    w.configure(highlightbackground=color_map[w.cget("highlightbackground")])
+                if "activebackground" in keys and w.cget("activebackground") in color_map:
+                    w.configure(activebackground=color_map[w.cget("activebackground")])
+                if "activeforeground" in keys and w.cget("activeforeground") in color_map:
+                    w.configure(activeforeground=color_map[w.cget("activeforeground")])
+            except: pass
+            for child in w.winfo_children(): update_widget(child)
+
+        update_widget(self.root)
+
+    def toggle_theme(self):
+        self.is_dark_mode = not self.is_dark_mode
+        self.apply_theme(self.is_dark_mode)
+        if self.is_dark_mode:
+            self.btn_theme.config(text="☀️ Modo Claro", bg="#1e1e2e", fg="#f8f8f2")
+        else:
+            self.btn_theme.config(text="🌙 Modo Escuro", bg="#f8f9fa", fg="#333")
 
     def _handle_login(self):
         user = self.entry_user.get()
@@ -77,6 +134,7 @@ class LoginRegisterWindow:
             
         user_data = self.db.authenticate_user(user, pwd)
         if user_data:
+            user_data['is_dark_mode'] = self.is_dark_mode
             self.on_success(user_data)
         else:
             messagebox.showerror("Erro", "Usuário ou senha incorretos.")

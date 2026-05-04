@@ -36,6 +36,11 @@ class SpriteApp:
         self.update_canvas()
         
         self.log_event(f"App Iniciado por {self.user_data['username']}")
+        
+        self.is_dark_mode = self.user_data.get('is_dark_mode', False)
+        if self.is_dark_mode:
+            self.is_dark_mode = False
+            self.toggle_theme()
 
     def _apply_styles(self):
         style = ttk.Style()
@@ -60,6 +65,10 @@ class SpriteApp:
         header.pack_propagate(False)
 
         tk.Label(header, text="🖼️ Sprite Splitter and Viewer", font=("Segoe UI", 14, "bold"), bg="white", fg="#333").pack(side=tk.LEFT)
+        
+        self.btn_theme = tk.Button(header, text="🌙 Modo Escuro", font=("Segoe UI", 9), bg="white", fg="#333", bd=0, cursor="hand2", command=self.toggle_theme)
+        self.btn_theme.pack(side=tk.RIGHT, padx=15)
+        
         tk.Label(header, text=f"Usuário: {self.user_data['username']}", font=("Segoe UI", 9), bg="white", fg="#666").pack(side=tk.RIGHT)
 
         # Container Principal
@@ -138,7 +147,7 @@ class SpriteApp:
         self.canvas = tk.Canvas(preview_panel, bg="#4a5568", bd=0, highlightthickness=0)
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.canvas_image_id = self.canvas.create_image(150, 150, anchor=tk.CENTER)
-        self.canvas.create_text(150, 150, text="Carregue uma sprite sheet e gere o preview", fill="#cbd5e0", font=("Segoe UI", 10))
+        self.canvas_text_id = self.canvas.create_text(150, 150, text="Carregue uma sprite sheet e gere o preview", fill="#cbd5e0", font=("Segoe UI", 10))
 
         # Painel Direito: Exportação
         right_panel = tk.LabelFrame(center_frame, text=" Exportação e Catálogo ", font=("Segoe UI", 10, "bold"), padx=15, pady=15, bg="white", fg="#333", bd=1, relief="flat")
@@ -159,6 +168,13 @@ class SpriteApp:
             bd=0, cursor="hand2", command=self.export_sprites
         )
         btn_export.grid(row=8, column=0, sticky="ew", ipady=10)
+
+        # Histórico de Itens Salvos
+        tk.Label(right_panel, text="Últimos itens salvos:", font=("Segoe UI", 9, "bold"), bg="white", fg="#666").grid(row=9, column=0, sticky="w", pady=(20, 5))
+        self.history_listbox = tk.Listbox(right_panel, font=("Segoe UI", 9), bg="#f1f3f5", bd=0, highlightthickness=0, height=5)
+        self.history_listbox.grid(row=10, column=0, sticky="ew")
+        
+        self.update_history()
 
     def load_image(self):
         filepath = filedialog.askopenfilename(
@@ -263,6 +279,65 @@ class SpriteApp:
         # Chama novamente essa função daqui a ~16ms (aprox 60 quadros/s de atualização de interface)
         self.root.after(16, self.update_canvas)
 
+    def apply_theme(self, to_dark):
+        color_map = {
+            "#f8f9fa": "#1e1e2e", "white": "#282a36", "#ffffff": "#282a36",
+            "#333": "#f8f8f2", "#333333": "#f8f8f2", "#666": "#bfbfbf", "#666666": "#bfbfbf",
+            "#495057": "#f8f8f2", "#adb5bd": "#6272a4", "#f1f3f5": "#44475a", 
+            "#4a5568": "#191a21", "black": "white"
+        }
+        if not to_dark:
+            color_map = {
+                "#1e1e2e": "#f8f9fa", "#282a36": "white", "#f8f8f2": "#333", 
+                "#bfbfbf": "#666", "#6272a4": "#adb5bd", "#44475a": "#f1f3f5", 
+                "#191a21": "#4a5568", "white": "black"
+            }
+
+        def update_widget(w):
+            try:
+                keys = w.keys()
+                if "bg" in keys and w.cget("bg") in color_map:
+                    w.configure(bg=color_map[w.cget("bg")])
+                if "fg" in keys and w.cget("fg") in color_map:
+                    w.configure(fg=color_map[w.cget("fg")])
+                if "insertbackground" in keys and w.cget("insertbackground") in color_map:
+                    w.configure(insertbackground=color_map[w.cget("insertbackground")])
+            except: pass
+            
+            for child in w.winfo_children(): update_widget(child)
+
+        update_widget(self.root)
+        
+        # O ttk.Combobox usa o estilo do root em alguns temas, e bg do Canvas
+        if to_dark:
+            self.canvas.itemconfig(self.canvas_text_id, fill="#6272a4")
+        else:
+            self.canvas.itemconfig(self.canvas_text_id, fill="#cbd5e0")
+
+    def toggle_theme(self):
+        self.is_dark_mode = not getattr(self, 'is_dark_mode', False)
+        self.apply_theme(self.is_dark_mode)
+        
+        if self.is_dark_mode:
+            self.btn_theme.config(text="☀️ Modo Claro")
+        else:
+            self.btn_theme.config(text="🌙 Modo Escuro")
+
+    def update_history(self):
+        self.history_listbox.delete(0, tk.END)
+        logs = self.db.get_user_logs(self.user_data['id'], limit=50)
+        count = 0
+        for log in logs:
+            action = log[0]
+            if "Exportação Concluída" in action:
+                display_text = action.replace("Exportação Concluída: ", "• ")
+                self.history_listbox.insert(tk.END, display_text)
+                count += 1
+                if count >= 5:
+                    break
+        if count == 0:
+            self.history_listbox.insert(tk.END, "Nenhum item salvo.")
+
     def export_sprites(self):
         export_mode = self.combo_export_mode.get()
         
@@ -313,6 +388,7 @@ class SpriteApp:
             path = entry["export_path"]
             version = entry["version"]
             self.log_event(f"Exportação Concluída: {project} ({version})")
+            self.update_history()
             messagebox.showinfo("Sucesso", f"Exportação concluída!\nVersão gerada: {version}\nSalvo em: {path}")
 
         except Exception as e:
