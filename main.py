@@ -15,7 +15,7 @@ class SpriteApp:
         self.user_data = user_data
         self.db = UserDB()
         
-        self.root.title("VLV Sprite Organizer")
+        self.root.title("TESTE ITERAÇÃO 2")
         self.root.geometry("1000x700")
         self.root.configure(bg="#f8f9fa")
 
@@ -59,7 +59,15 @@ class SpriteApp:
         header.pack(fill=tk.X)
         header.pack_propagate(False)
 
+<<<<<<< Updated upstream
         tk.Label(header, text="🖼️ Sprite Splitter and Viewer", font=("Segoe UI", 14, "bold"), bg="white", fg="#333").pack(side=tk.LEFT)
+=======
+        tk.Label(header, text="TESTE ITERAÇÃO 2", font=("Segoe UI", 14, "bold"), bg="white", fg="#333").pack(side=tk.LEFT)
+        
+        self.btn_theme = tk.Button(header, text="🌙 Modo Escuro", font=("Segoe UI", 9), bg="white", fg="#333", bd=0, cursor="hand2", command=self.toggle_theme)
+        self.btn_theme.pack(side=tk.RIGHT, padx=15)
+        
+>>>>>>> Stashed changes
         tk.Label(header, text=f"Usuário: {self.user_data['username']}", font=("Segoe UI", 9), bg="white", fg="#666").pack(side=tk.RIGHT)
 
         # Container Principal

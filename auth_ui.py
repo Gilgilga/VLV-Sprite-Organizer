@@ -5,7 +5,7 @@ from database import UserDB
 class LoginRegisterWindow:
     def __init__(self, root, on_success_callback):
         self.root = root
-        self.root.title("Acesso - VLV Sprite Organizer")
+        self.root.title("TESTE ITERAÇÃO 2")
         self.root.geometry("400x500")
         self.root.configure(bg="#f8f9fa") # Fundo cinza suave tipo moderno
         
