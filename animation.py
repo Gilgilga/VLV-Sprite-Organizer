@@ -1,5 +1,5 @@
 import time
-
+#.
 class AnimationPlayer:
     """
     Controla o estado e reprodução de uma animação baseada em frames.

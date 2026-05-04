@@ -11,3 +11,4 @@ def scale_image(pil_image, scale_factor):
     width, height = pil_image.size
     new_size = (int(width * scale_factor), int(height * scale_factor))
     return pil_image.resize(new_size, Image.Resampling.NEAREST)
+#.

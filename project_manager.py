@@ -131,3 +131,4 @@ class ProjectManager:
                 unregistered.append(img_path)
                 
         return unregistered
+#.
