@@ -4,12 +4,20 @@ import os
 from datetime import datetime
 
 class UserDB:
-    def __init__(self, db_path="sprite_manager.db"):
-        self.db_path = db_path
+    def __init__(self, db_path=None):
+        if db_path is None:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            self.db_path = os.path.join(current_dir, "sprite_manager.db")
+        else:
+            self.db_path = db_path
         self._init_db()
 
     def _init_db(self):
-        """Inicializa as tabelas se não existirem."""
+        """Inicializa as tabelas se não existirem. Se o banco estiver vazio, cria o usuário padrão."""
+        db_dir = os.path.dirname(os.path.abspath(self.db_path))
+        if db_dir:
+            os.makedirs(db_dir, exist_ok=True)
+
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             # Tabela de Usuários
@@ -32,6 +40,16 @@ class UserDB:
                 )
             ''')
             conn.commit()
+
+            # Se não houver nenhum usuário, cria o admin/1234 padrão
+            cursor.execute("SELECT COUNT(*) FROM users")
+            if cursor.fetchone()[0] == 0:
+                password_hash, salt = self._hash_password("1234")
+                cursor.execute(
+                    "INSERT INTO users (username, password_hash, salt) VALUES (?, ?, ?)",
+                    ("admin", password_hash, salt)
+                )
+                conn.commit()
 
     def _hash_password(self, password, salt=None):
         """Gera um hash SHA-256 com salt."""

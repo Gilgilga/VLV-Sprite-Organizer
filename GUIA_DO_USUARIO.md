@@ -1,10 +1,10 @@
-# 📖 Guia do Usuário - VLV Sprite Organizer
+# Guia do Usuário - VLV Sprite Organizer
 
 Bem-vindo ao **VLV Sprite Organizer**, sua ferramenta premium para gerenciamento, fatiamento e visualização de *Sprite Sheets*. Projetado para desenvolvedores de jogos e artistas, este sistema simplifica o fluxo de trabalho entre a criação de assets e a implementação na engine.
 
 ---
 
-## 🎨 Visão Geral do Sistema
+## Visão Geral do Sistema
 
 O **VLV Sprite Organizer** permite que você:
 - **Fatie** Sprite Sheets complexas com precisão.
@@ -15,7 +15,7 @@ O **VLV Sprite Organizer** permite que você:
 
 ---
 
-## 🔐 1. Acesso e Segurança
+## 1. Acesso e Segurança
 
 Ao iniciar a aplicação, você será recebido pela tela de autenticação. 
 
@@ -28,7 +28,7 @@ Ao iniciar a aplicação, você será recebido pela tela de autenticação.
 
 ---
 
-## 🖼️ 2. Carregamento de Arquivos
+## 2. Carregamento de Arquivos
 
 No topo da interface, você encontrará o botão principal de carregamento.
 
@@ -38,7 +38,7 @@ No topo da interface, você encontrará o botão principal de carregamento.
 
 ---
 
-## ✂️ 3. Configurações de Corte (Slicing)
+## 3. Configurações de Corte (Slicing)
 
 No painel esquerdo (**Configurações de Corte**), defina como a imagem será dividida:
 
@@ -53,18 +53,18 @@ Após preencher, clique em **Gerar Preview** para fatiar a imagem.
 
 ---
 
-## 🎞️ 4. Preview e Controles de Animação
+## 4. Preview e Controles de Animação
 
 Uma vez gerado o preview, a animação começará a ser exibida no canvas central.
 
 ### Controles Disponíveis:
-- **▶ Play / ⏸ Pause:** Controle a reprodução da sequência.
+- **Play / Pause:** Controle a reprodução da sequência.
 - **FPS:** Ajuste a velocidade da animação em quadros por segundo (padrão: 12).
 - **Zoom Preview:** Deslize o slider para aumentar a visualização da sprite em até 10x, perfeito para conferir detalhes de Pixel Art sem perda de nitidez (Nearest Neighbor interpolation).
 
 ---
 
-## 📦 5. Exportação e Catálogo
+## 5. Exportação e Catálogo
 
 O VLV Sprite Organizer não apenas corta, mas também organiza sua biblioteca de assets.
 
@@ -87,7 +87,7 @@ Sempre que você clica em **Exportar e Catalogar**, o sistema verifica se já ex
 
 ---
 
-## 📂 6. Estrutura do Workspace
+## 6. Estrutura do Workspace
 
 Seus arquivos são organizados na seguinte hierarquia dentro da pasta do projeto:
 
@@ -107,7 +107,7 @@ graph TD
 
 ---
 
-## 🛠️ Solução de Problemas
+## Solução de Problemas
 
 - **A imagem não carrega:** Verifique se o formato é suportado e se o arquivo não está corrompido.
 - **Frames desalinhados:** Certifique-se de que a largura e altura do frame coincidem com o desenho original da Sprite Sheet.

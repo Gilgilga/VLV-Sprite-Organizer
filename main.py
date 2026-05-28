@@ -64,9 +64,9 @@ class SpriteApp:
         header.pack(fill=tk.X)
         header.pack_propagate(False)
 
-        tk.Label(header, text="🖼️ Sprite Splitter and Viewer", font=("Segoe UI", 14, "bold"), bg="white", fg="#333").pack(side=tk.LEFT)
+        tk.Label(header, text="Sprite Splitter and Viewer", font=("Segoe UI", 14, "bold"), bg="white", fg="#333").pack(side=tk.LEFT)
         
-        self.btn_theme = tk.Button(header, text="🌙 Modo Escuro", font=("Segoe UI", 9), bg="white", fg="#333", bd=0, cursor="hand2", command=self.toggle_theme)
+        self.btn_theme = tk.Button(header, text="Modo Escuro", font=("Segoe UI", 9), bg="white", fg="#333", bd=0, cursor="hand2", command=self.toggle_theme)
         self.btn_theme.pack(side=tk.RIGHT, padx=15)
         
         tk.Label(header, text=f"Usuário: {self.user_data['username']}", font=("Segoe UI", 9), bg="white", fg="#666").pack(side=tk.RIGHT)
@@ -132,8 +132,8 @@ class SpriteApp:
         
         btn_anim_frame = tk.Frame(anim_panel, bg="white")
         btn_anim_frame.pack(fill=tk.X, pady=5)
-        tk.Button(btn_anim_frame, text="▶ Play", font=("Segoe UI", 9), bg="white", command=self.play_anim).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0,2))
-        tk.Button(btn_anim_frame, text="⏸ Pause", font=("Segoe UI", 9), bg="white", command=self.pause_anim).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(2,0))
+        tk.Button(btn_anim_frame, text="Play", font=("Segoe UI", 9), bg="white", command=self.play_anim).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0,2))
+        tk.Button(btn_anim_frame, text="Pause", font=("Segoe UI", 9), bg="white", command=self.pause_anim).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(2,0))
 
         tk.Label(left_panel, text="Zoom Preview:", font=("Segoe UI", 9), bg="white").grid(row=10, column=0, sticky="w", pady=(20,0))
         self.scale_zoom = tk.Scale(left_panel, from_=1, to=10, orient=tk.HORIZONTAL, bg="white", bd=0, highlightthickness=0, command=self.change_zoom)
@@ -319,9 +319,9 @@ class SpriteApp:
         self.apply_theme(self.is_dark_mode)
         
         if self.is_dark_mode:
-            self.btn_theme.config(text="☀️ Modo Claro")
+            self.btn_theme.config(text="Modo Claro")
         else:
-            self.btn_theme.config(text="🌙 Modo Escuro")
+            self.btn_theme.config(text="Modo Escuro")
 
     def update_history(self):
         self.history_listbox.delete(0, tk.END)

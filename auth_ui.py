@@ -24,7 +24,7 @@ class LoginRegisterWindow:
         # Botão de Tema no topo
         bg_root = "#1e1e2e" if self.is_dark_mode else "#f8f9fa"
         fg_btn = "#f8f8f2" if self.is_dark_mode else "#333"
-        btn_text = "☀️ Modo Claro" if self.is_dark_mode else "🌙 Modo Escuro"
+        btn_text = "Modo Claro" if self.is_dark_mode else "Modo Escuro"
         
         self.btn_theme = tk.Button(self.root, text=btn_text, font=("Segoe UI", 9), bg=bg_root, fg=fg_btn, bd=0, cursor="hand2", command=self.toggle_theme)
         self.btn_theme.place(relx=0.95, rely=0.05, anchor=tk.NE)
@@ -120,9 +120,9 @@ class LoginRegisterWindow:
         self.is_dark_mode = not self.is_dark_mode
         self.apply_theme(self.is_dark_mode)
         if self.is_dark_mode:
-            self.btn_theme.config(text="☀️ Modo Claro", bg="#1e1e2e", fg="#f8f8f2")
+            self.btn_theme.config(text="Modo Claro", bg="#1e1e2e", fg="#f8f8f2")
         else:
-            self.btn_theme.config(text="🌙 Modo Escuro", bg="#f8f9fa", fg="#333")
+            self.btn_theme.config(text="Modo Escuro", bg="#f8f9fa", fg="#333")
 
     def _handle_login(self):
         user = self.entry_user.get()
